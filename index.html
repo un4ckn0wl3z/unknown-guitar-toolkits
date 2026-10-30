@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Unknown Guitar Toolkits</title>
+<meta name="description" content="ชุดเครื่องมือฝึกกีตาร์ 4 ตัว: TabLens, Riff Forge, Tempo Bench และ Guitar Stem Studio ฟรี โอเพนซอร์ส ทำงานบนเครื่องคุณ">
+<meta property="og:title" content="Unknown Guitar Toolkits">
+<meta property="og:description" content="From a tab in your hand to a band behind you. Four free, open-source tools for guitarists.">
+<meta property="og:image" content="assets/riff-forge.webp">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: dark rosewood fretboard page; six strings run through the hero with each tool as a note; tools follow in workflow order */
+:root {
+  --bg: #15110f; --bg-2: #1e1815; --bg-3: #271f1b; --ink: #f0e7db; --muted: #a8998a; --line: #3b302a; --string: #cdbca6; --fret: #5a4a40;
+  --tablens: #e0844a; --riff: #c6ea63; --tempo: #4fbcac; --gss: #f2ad37;
+  --on-accent: #15110f;
+  --font-display: "Chakra Petch", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eeeae4; --bg-2: #f8f6f2; --bg-3: #e4ded5; --ink: #211a15; --muted: #6a5c51; --line: #d6ccc0; --string: #8a7663; --fret: #b9aa9a;
+    --tablens: #a4501a; --riff: #557311; --tempo: #1d6b62; --gss: #a96d0b; --on-accent: #ffffff; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #eeeae4; --bg-2: #f8f6f2; --bg-3: #e4ded5; --ink: #211a15; --muted: #6a5c51; --line: #d6ccc0; --string: #8a7663; --fret: #b9aa9a;
+  --tablens: #a4501a; --riff: #557311; --tempo: #1d6b62; --gss: #a96d0b; --on-accent: #ffffff; color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+[id] { scroll-margin-top: 84px; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 var(--font-body); }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+
+/* header */
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 21; background: var(--bg); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 1.05rem/1 var(--font-display); letter-spacing: .02em; }
+.pick { width: 26px; height: 30px; background: var(--ink); clip-path: path("M13 0 C24 0 26 6 26 11 C26 19 18 27 13 30 C8 27 0 19 0 11 C0 6 2 0 13 0 Z"); display: grid; place-items: center; color: var(--bg); font: 700 .7rem/1 var(--font-mono); }
+.nav { display: flex; align-items: center; gap: 6px; }
+.nav a { text-decoration: none; color: var(--muted); font-size: .9rem; padding: 6px 10px; border-radius: 8px; }
+.nav a:hover { color: var(--ink); }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; padding: 2px; margin-left: 6px; }
+.lang button { border: 0; background: transparent; color: var(--muted); font: 600 .78rem/1 var(--font-mono); padding: 7px 10px; border-radius: 99px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+@media (max-width: 640px) { .nav a { display: none; } }
+
+/* hero */
+.hero { padding-block: 72px 24px; }
+.eyebrow { font: 600 .78rem/1.4 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 18px; }
+h1 { font: 700 clamp(2.4rem, 6.4vw, 4.6rem)/1.08 var(--font-display); margin: 0; max-width: 16ch; text-wrap: balance; letter-spacing: -.01em; }
+h1 em { font-style: normal; color: var(--string); }
+.lead { max-width: 60ch; color: var(--muted); font-size: 1.08rem; margin: 22px 0 30px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; font-size: .95rem; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-2); color: var(--ink); cursor: pointer; }
+.btn:hover { border-color: var(--string); }
+.btn.solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn svg { width: 16px; height: 16px; fill: currentColor; flex: none; }
+
+/* the six strings */
+.neck { position: relative; margin-top: 56px; height: 214px; border-radius: 14px; background: linear-gradient(180deg, var(--bg-3), var(--bg-2)); border: 1px solid var(--line); overflow: hidden; }
+.neck .fret { position: absolute; top: 0; bottom: 0; width: 3px; background: var(--fret); opacity: .7; }
+.neck .inlay { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--line); }
+.neck .string { position: absolute; left: 0; right: 0; background: linear-gradient(180deg, transparent, var(--string) 30%, var(--string) 70%, transparent); transform-origin: center; }
+.neck .string.ring { animation: ring .7s ease-out; }
+@keyframes ring { 0% { transform: translateY(0); } 10% { transform: translateY(-2.5px); } 25% { transform: translateY(2px); } 40% { transform: translateY(-1.4px); } 60% { transform: translateY(.8px); } 100% { transform: translateY(0); } }
+.note { position: absolute; transform: translate(-50%, -50%); z-index: 2; display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px 7px 8px; border-radius: 999px; border: 0; background: var(--c); color: var(--on-accent); font: 600 .82rem/1 var(--font-display); cursor: pointer; box-shadow: 0 0 0 4px var(--bg-2); white-space: nowrap; }
+.note b { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--on-accent) 18%, transparent); font: 600 .72rem/1 var(--font-mono); }
+.note:hover { filter: brightness(1.08); }
+.neck-hint { margin: 10px 0 0; font: .78rem/1.4 var(--font-mono); color: var(--muted); }
+@media (max-width: 640px) { .note span { display: none; } .note::after { content: attr(data-short); } .note { padding: 6px 10px 6px 6px; font-size: .74rem; } .neck { height: 190px; } }
+@media (prefers-reduced-motion: reduce) { .neck .string.ring { animation: none; } html { scroll-behavior: auto; } }
+
+/* sections */
+section { padding-block: 84px; }
+.sec-head { max-width: 62ch; margin-bottom: 36px; }
+h2 { font: 700 clamp(1.7rem, 3.6vw, 2.5rem)/1.15 var(--font-display); margin: 0 0 12px; text-wrap: balance; }
+.sec-head p { color: var(--muted); margin: 0; }
+
+/* how they connect */
+.flow { display: grid; gap: 16px; }
+.lane { display: grid; gap: 10px; padding: 20px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-2); }
+.lane-title { font: 600 .78rem/1.4 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.steps { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.file { font: .82rem/1.3 var(--font-mono); padding: 7px 10px; border-radius: 6px; border: 1px dashed var(--fret); color: var(--ink); background: var(--bg); }
+.tool { font: 600 .9rem/1.2 var(--font-display); padding: 8px 14px; border-radius: 999px; background: var(--c); color: var(--on-accent); text-decoration: none; }
+.arrow { color: var(--muted); font-family: var(--font-mono); }
+@media (max-width: 640px) { .steps { flex-direction: column; align-items: flex-start; } .arrow { transform: rotate(90deg); padding-left: 10px; } }
+
+/* tools */
+.tools { display: grid; gap: 88px; }
+.app { display: grid; gap: 36px; align-items: center; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .app { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); } .app:nth-child(even) .shot { order: 2; } }
+.shot { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .55); }
+.shot .chrome { display: flex; align-items: center; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.shot .chrome i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.shot .chrome span { margin-left: 8px; font: .72rem/1 var(--font-mono); color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.shot img { width: 100%; height: auto; aspect-ratio: var(--ar); object-fit: cover; object-position: top; }
+.info { min-width: 0; }
+.role { display: inline-flex; align-items: center; gap: 8px; font: 600 .78rem/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--c); margin-bottom: 14px; }
+.role::before { content: ""; width: 18px; height: 3px; border-radius: 2px; background: var(--c); }
+.app h3 { font: 700 clamp(1.6rem, 3vw, 2.1rem)/1.15 var(--font-display); margin: 0 0 8px; }
+.tagline { font-size: 1.08rem; margin: 0 0 16px; }
+.io { display: inline-block; font: .82rem/1.4 var(--font-mono); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; margin-bottom: 18px; }
+.feats { margin: 0 0 22px; padding: 0; list-style: none; display: grid; gap: 9px; }
+.feats li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; color: var(--muted); }
+.feats li::before { content: ""; width: 7px; height: 7px; margin-top: .62em; border-radius: 50%; background: var(--c); }
+.meta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.platform { font: .78rem/1 var(--font-mono); color: var(--muted); padding: 8px 10px; border-radius: 6px; background: var(--bg-3); }
+.app .btn.solid { background: var(--c); border-color: var(--c); color: var(--on-accent); }
+
+/* principles */
+.principles { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+.principles div { background: var(--bg-2); padding: 24px; }
+.principles h4 { font: 600 1.05rem/1.3 var(--font-display); margin: 0 0 6px; }
+.principles p { margin: 0; color: var(--muted); font-size: .94rem; }
+
+footer { border-top: 1px solid var(--line); padding-block: 32px 44px; color: var(--muted); font-size: .9rem; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+footer a { color: var(--ink); }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#top"><span class="pick" aria-hidden="true">UG</span>Unknown Guitar Toolkits</a>
+    <nav class="nav" aria-label="Main">
+      <a href="#tools" data-i18n="nav.tools">เครื่องมือ</a>
+      <a href="#connect" data-i18n="nav.connect">ใช้ร่วมกัน</a>
+      <a href="https://github.com/un4ckn0wl3z/unknown-guitar-toolkits" target="_blank" rel="noopener">GitHub</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="th" aria-pressed="true">ไทย</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="eyebrow" data-i18n="hero.eyebrow">4 เครื่องมือสำหรับนักกีตาร์ · ฟรี · โอเพนซอร์ส</p>
+    <h1 data-i18n-html="hero.title">จากแท็บในมือ<br><em>ถึงวงที่เล่นตามคุณ</em></h1>
+    <p class="lead" data-i18n="hero.lead">อ่านแท็บจากรูป สร้างกลองและเบสจากริฟฟ์ ซ้อมกับคลิกที่ตั้งได้ละเอียดทีละห้อง และแยกกีตาร์ออกจากเพลงจริง ทุกตัวทำงานบนเครื่องของคุณ ไม่ต้องอัปโหลดเพลงไปที่ไหน</p>
+    <div class="cta">
+      <a class="btn solid" href="#tools" data-i18n="hero.cta">เลือกเครื่องมือ</a>
+      <a class="btn" href="#connect" data-i18n="hero.cta2">ดูว่าใช้ร่วมกันยังไง</a>
+    </div>
+    <div class="neck" id="neck" aria-label="Six guitar strings with the four tools placed on them"></div>
+    <p class="neck-hint" data-i18n="hero.hint">แตะชื่อเครื่องมือบนสายเพื่อดีดสายแล้วข้ามไปดู</p>
+  </div>
+
+  <section id="connect">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="flow.title">ใช้ร่วมกันยังไง</h2>
+        <p data-i18n="flow.lead">ไฟล์ที่ได้จากเครื่องมือหนึ่งเปิดต่อในอีกตัวได้ทันที ทุกตัวใช้ไฟล์มาตรฐาน จึงต่อเข้า DAW หรือโปรแกรมแท็บที่คุณใช้อยู่ได้ด้วย</p>
+      </div>
+      <div class="flow">
+        <div class="lane">
+          <div class="lane-title" data-i18n="flow.laneA">เริ่มจากแท็บ</div>
+          <div class="steps">
+            <span class="file" data-i18n="flow.tabImage">รูปแท็บ · แท็บตัวอักษร</span><span class="arrow" aria-hidden="true">→</span>
+            <a class="tool" href="#tablens" style="--c: var(--tablens)">TabLens</a><span class="arrow" aria-hidden="true">→</span>
+            <span class="file">.gp5</span><span class="arrow" aria-hidden="true">→</span>
+            <a class="tool" href="#riff-forge" style="--c: var(--riff)">Riff Forge</a><span class="arrow" aria-hidden="true">→</span>
+            <span class="file" data-i18n="flow.band">กลอง + เบส · MIDI / WAV</span><span class="arrow" aria-hidden="true">→</span>
+            <a class="tool" href="#tempo-bench" style="--c: var(--tempo)">Tempo Bench</a><span class="arrow" aria-hidden="true">→</span>
+            <span class="file" data-i18n="flow.click">ซ้อมกับคลิก · click track</span>
+          </div>
+        </div>
+        <div class="lane">
+          <div class="lane-title" data-i18n="flow.laneB">เริ่มจากเพลงจริง</div>
+          <div class="steps">
+            <span class="file">MP3 · YouTube</span><span class="arrow" aria-hidden="true">→</span>
+            <a class="tool" href="#guitar-stem-studio" style="--c: var(--gss)">Guitar Stem Studio</a><span class="arrow" aria-hidden="true">→</span>
+            <span class="file" data-i18n="flow.stems">6 stem · backing track</span><span class="arrow" aria-hidden="true">→</span>
+            <a class="tool" href="#tempo-bench" style="--c: var(--tempo)">Tempo Bench</a><span class="arrow" aria-hidden="true">→</span>
+            <span class="file" data-i18n="flow.align">วางคลิกให้ตรงเพลง · ส่งออกคลิก</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="tools.title">เครื่องมือทั้ง 4 ตัว</h2>
+        <p data-i18n="tools.lead">ใช้แยกกันก็ได้ ใช้ต่อกันก็ได้ ตัวที่รันในเบราว์เซอร์เปิดใช้ได้ทันทีโดยไม่ต้องติดตั้ง</p>
+      </div>
+      <div class="tools">
+
+        <article class="app" id="tablens" style="--c: var(--tablens)">
+          <div class="shot"><div class="chrome"><i></i><i></i><i></i><span>un4ckn0wl3z.github.io/TabLens</span></div><img data-src-th="assets/tablens-th.webp" data-src-en="assets/tablens-en.webp" src="assets/tablens-th.webp" width="1400" height="941" style="--ar: 1400 / 941" alt="TabLens reading a tab image into fret numbers" loading="lazy"></div>
+          <div class="info">
+            <div class="role" data-i18n="tablens.role">อ่านแท็บ</div>
+            <h3>TabLens</h3>
+            <p class="tagline" data-i18n="tablens.tag">แปลงรูปแท็บกีตาร์เป็นไฟล์ Guitar Pro 5</p>
+            <div class="io" data-i18n="tablens.io">รูปสแกน · ภาพหน้าจอ · แท็บตัวอักษร → .gp5</div>
+            <ul class="feats">
+              <li data-i18n="tablens.f1">อ่านเลขเฟร็ตและเส้นกั้นห้องจากรูป หมุนรูปที่เอียงให้ตรงเอง ตัวเลขที่ไม่มั่นใจมีไฮไลต์ให้ตรวจ</li>
+              <li data-i18n="tablens.f2">ใส่จังหวะ และเทคนิค bend, slide, hammer-on, palm mute, harmonic ได้ในตัว</li>
+              <li data-i18n="tablens.f3">ฟังตัวอย่างก่อนส่งออก ไฟล์เปิดได้ใน Guitar Pro 5–8, TuxGuitar และ MuseScore</li>
+              <li data-i18n="tablens.f4">ทำงานในเบราว์เซอร์ ไม่ส่งรูปออกไปไหน</li>
+            </ul>
+            <div class="meta-row">
+              <a class="btn solid" href="https://un4ckn0wl3z.github.io/TabLens/" target="_blank" rel="noopener" data-i18n="btn.open">เปิดแอป</a>
+              <a class="btn" href="https://github.com/un4ckn0wl3z/TabLens" target="_blank" rel="noopener">GitHub</a>
+              <span class="platform" data-i18n="platform.browser">เบราว์เซอร์</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="app" id="riff-forge" style="--c: var(--riff)">
+          <div class="shot"><div class="chrome"><i></i><i></i><i></i><span>un4ckn0wl3z.github.io/riff-forge</span></div><img src="assets/riff-forge.webp" width="1270" height="900" style="--ar: 1270 / 900" alt="Riff Forge with genre choices and a bar map" loading="lazy"></div>
+          <div class="info">
+            <div class="role" data-i18n="riff.role">สร้างวง</div>
+            <h3>Riff Forge</h3>
+            <p class="tagline" data-i18n="riff.tag">ใส่ริฟฟ์จาก Guitar Pro แล้วได้กลองกับเบสหลายเวอร์ชัน</p>
+            <div class="io">.gp · .gpx · .gp3–.gp5 → MIDI · WAV</div>
+            <ul class="feats">
+              <li data-i18n="riff.f1">6 แนว: Heavy, Thrash, Metalcore, Djent, Death และ Black Metal ปรับความหนัก ความซับซ้อน และ double kick</li>
+              <li data-i18n="riff.f2">เบสเดินตามริฟฟ์ 3 แบบ รองรับโน้ต low B</li>
+              <li data-i18n="riff.f3">เล่นตาม repeat และ ending เลือกช่วงจากแผนที่ห้อง และตั้งแนวแยกตามท่อน</li>
+              <li data-i18n="riff.f4">ส่งออก MIDI (General MIDI หรือ EZbass) และ WAV แยกกลอง เบส และคลิก</li>
+            </ul>
+            <div class="meta-row">
+              <a class="btn solid" href="https://un4ckn0wl3z.github.io/riff-forge/" target="_blank" rel="noopener" data-i18n="btn.open">เปิดแอป</a>
+              <a class="btn" href="https://github.com/un4ckn0wl3z/riff-forge" target="_blank" rel="noopener">GitHub</a>
+              <span class="platform" data-i18n="platform.browser">เบราว์เซอร์</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="app" id="tempo-bench" style="--c: var(--tempo)">
+          <div class="shot"><div class="chrome"><i></i><i></i><i></i><span>un4ckn0wl3z.github.io/tempo-bench</span></div><img src="assets/tempo-bench.webp" width="1280" height="780" style="--ar: 1280 / 780" alt="Tempo Bench metronome with per-beat accents" loading="lazy"></div>
+          <div class="info">
+            <div class="role" data-i18n="tempo.role">ซ้อมกับจังหวะ</div>
+            <h3>Tempo Bench</h3>
+            <p class="tagline" data-i18n="tempo.tag">เมโทรนอมที่ตั้งได้ละเอียด และโหมดซ้อมกับไฟล์เพลง</p>
+            <div class="io" data-i18n="tempo.io">Guitar Pro · MIDI · ไฟล์เสียง → click track WAV / MIDI</div>
+            <ul class="feats">
+              <li data-i18n="tempo.f1">BPM ละเอียดถึงทศนิยม เน้นจังหวะรายตัว ซอยโน้ต swing polyrhythm และโน้ตประจุด</li>
+              <li data-i18n="tempo.f2">ไต่ความเร็ว gap click โครงเพลง และสถิติการซ้อม</li>
+              <li data-i18n="tempo.f3">ซ้อมกับเพลง: ตั้งคลิกทีละห้อง เล่นโน้ตจากไฟล์ และปิดเสียงแทร็กที่จะเล่นเอง</li>
+              <li data-i18n="tempo.f4">เสียงกลองและเบสชุดเดียวกับ Riff Forge ส่งออก click track เฉพาะห้องที่เลือก</li>
+            </ul>
+            <div class="meta-row">
+              <a class="btn solid" href="https://un4ckn0wl3z.github.io/tempo-bench/" target="_blank" rel="noopener" data-i18n="btn.open">เปิดแอป</a>
+              <a class="btn" href="https://github.com/un4ckn0wl3z/tempo-bench" target="_blank" rel="noopener">GitHub</a>
+              <span class="platform" data-i18n="platform.browser">เบราว์เซอร์</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="app" id="guitar-stem-studio" style="--c: var(--gss)">
+          <div class="shot"><div class="chrome"><i></i><i></i><i></i><span>localhost:8000</span></div><img data-src-th="assets/gss-th.webp" data-src-en="assets/gss-en.webp" src="assets/gss-th.webp" width="1400" height="766" style="--ar: 1400 / 766" alt="Guitar Stem Studio mixer with six stems" loading="lazy"></div>
+          <div class="info">
+            <div class="role" data-i18n="gss.role">ซ้อมกับเพลงจริง</div>
+            <h3>Guitar Stem Studio</h3>
+            <p class="tagline" data-i18n="gss.tag">แยกเพลงจริงเป็น 6 stem แล้วปิดกีตาร์ไว้เล่นเอง</p>
+            <div class="io" data-i18n="gss.io">MP3 · ลิงก์ YouTube → 6 stem · backing track</div>
+            <ul class="feats">
+              <li data-i18n="gss.f1">แยกกีตาร์ ร้อง กลอง เบส เปียโน และเสียงอื่นด้วย AI (Demucs) ดาวน์โหลดแต่ละ stem ได้</li>
+              <li data-i18n="gss.f2">ปรับความเร็ว 25–150% โดยเสียงไม่เพี้ยน และวนซ้ำช่วง A–B</li>
+              <li data-i18n="gss.f3">เมโทรนอมตามจังหวะจริงของเพลง พร้อมนับนำ</li>
+              <li data-i18n="gss.f4">ส่งออก backing track เป็น MP3 หรือ WAV เลือก stem ช่วงเวลา และความเร็วได้</li>
+            </ul>
+            <div class="meta-row">
+              <a class="btn solid" href="https://github.com/un4ckn0wl3z/guitar-stem-studio/releases/latest" target="_blank" rel="noopener" data-i18n="btn.download">ดาวน์โหลด</a>
+              <a class="btn" href="https://github.com/un4ckn0wl3z/guitar-stem-studio" target="_blank" rel="noopener">GitHub</a>
+              <span class="platform" data-i18n="platform.desktop">Windows · macOS</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="principles">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="pr.title">สร้างมาแบบเดียวกันทั้งชุด</h2></div>
+      <div class="principles">
+        <div><h4 data-i18n="pr.local">ทำงานบนเครื่องคุณ</h4><p data-i18n="pr.localP">ไฟล์เพลงและแท็บอยู่ในเครื่องของคุณ ไม่ต้องสมัครบัญชี ไม่ต้องใช้ API key</p></div>
+        <div><h4 data-i18n="pr.files">ไฟล์มาตรฐาน</h4><p data-i18n="pr.filesP">GP5, MIDI, WAV และ MP3 เปิดต่อใน Guitar Pro, MuseScore หรือ DAW ได้ทันที</p></div>
+        <div><h4 data-i18n="pr.thai">ใช้ภาษาไทยได้</h4><p data-i18n="pr.thaiP">มีหน้าจอหรือคำอธิบายภาษาไทยทุกตัว TabLens และ Guitar Stem Studio สลับไทย / อังกฤษได้</p></div>
+        <div><h4 data-i18n="pr.open">ฟรีและโค้ดเปิด</h4><p data-i18n="pr.openP">ซอร์สโค้ดทั้งหมดอยู่บน GitHub แก้ไขต่อหรือรันเองได้</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Unknown Guitar Toolkits · <span data-i18n="ft.by">โดย</span> <a href="https://github.com/un4ckn0wl3z" target="_blank" rel="noopener">un4ckn0wl3z</a></span>
+    <span data-i18n="ft.note">เครื่องมือที่เขียนขึ้นเพื่อใช้ซ้อมกีตาร์เอง แล้วแบ่งให้คนอื่นใช้ด้วย</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const EN = {
+    'nav.tools': 'Tools', 'nav.connect': 'How they connect',
+    'hero.eyebrow': '4 tools for guitarists · free · open source',
+    'hero.title': 'From a tab in your hand<br><em>to a band behind you</em>',
+    'hero.lead': 'Read tab from a picture, build drums and bass from your riff, practise to a click you can shape bar by bar, and pull the guitar out of a real recording. Everything runs on your own machine, so your songs never leave it.',
+    'hero.cta': 'Pick a tool', 'hero.cta2': 'See how they connect',
+    'hero.hint': 'Tap a tool on the strings to pluck it and jump there',
+    'flow.title': 'How they fit together',
+    'flow.lead': 'What one tool exports, the next one opens. Every tool uses standard files, so they also slot into your DAW or tab editor.',
+    'flow.laneA': 'Start from a tab', 'flow.tabImage': 'tab image · text tab', 'flow.band': 'drums + bass · MIDI / WAV', 'flow.click': 'practise to a click · click track',
+    'flow.laneB': 'Start from a recording', 'flow.stems': '6 stems · backing track', 'flow.align': 'line the click up · export it',
+    'tools.title': 'The four tools', 'tools.lead': 'Use any one on its own or chain them. The browser tools open instantly, with nothing to install.',
+    'tablens.role': 'Read tab', 'tablens.tag': 'Turn guitar tab images into Guitar Pro 5 files', 'tablens.io': 'scans · screenshots · text tab → .gp5',
+    'tablens.f1': 'Reads fret numbers and barlines from images, straightens tilted scans, and highlights numbers worth checking',
+    'tablens.f2': 'Set the rhythm and add bends, slides, hammer-ons, palm mutes and harmonics',
+    'tablens.f3': 'Preview before export; files open in Guitar Pro 5–8, TuxGuitar and MuseScore',
+    'tablens.f4': 'Runs in the browser; your images stay on your device',
+    'riff.role': 'Build the band', 'riff.tag': 'Drop in a Guitar Pro riff and get drums and bass in several takes',
+    'riff.f1': 'Six styles: Heavy, Thrash, Metalcore, Djent, Death and Black Metal, with intensity, complexity and double kick',
+    'riff.f2': 'Bass lines that follow the riff in three approaches, down to low B',
+    'riff.f3': 'Follows repeats and endings, picks ranges on a bar map, and sets a different style per section',
+    'riff.f4': 'Exports MIDI (General MIDI or EZbass) and WAV stems for drums, bass and click',
+    'tempo.role': 'Practise in time', 'tempo.tag': 'A metronome you can shape in detail, plus practice with your song files', 'tempo.io': 'Guitar Pro · MIDI · audio → click track WAV / MIDI',
+    'tempo.f1': 'Decimal BPM, per-beat accents, subdivisions, swing, polyrhythms and dotted beat units',
+    'tempo.f2': 'Speed trainer, gap click, song structures and practice stats',
+    'tempo.f3': 'Song practice: set the click bar by bar, hear the notes from the file, and mute the part you play',
+    'tempo.f4': 'Same drum and bass samples as Riff Forge; export a click track for just the bars you pick',
+    'gss.role': 'Play along with the record', 'gss.tag': 'Split a real song into 6 stems and play the guitar part yourself', 'gss.io': 'MP3 · YouTube link → 6 stems · backing track',
+    'gss.f1': 'AI separation (Demucs) into guitar, vocals, drums, bass, piano and other; download any stem',
+    'gss.f2': 'Slow down to 25–150% with pitch kept, and loop any A–B section',
+    'gss.f3': 'A metronome that follows the song’s real beats, with count-in',
+    'gss.f4': 'Export a backing track as MP3 or WAV with your choice of stems, range and speed',
+    'btn.open': 'Open app', 'btn.download': 'Download', 'platform.browser': 'Browser', 'platform.desktop': 'Windows · macOS',
+    'pr.title': 'Built the same way, all four', 'pr.local': 'Runs on your machine', 'pr.localP': 'Your songs and tabs stay with you. No account, no API key.',
+    'pr.files': 'Standard files', 'pr.filesP': 'GP5, MIDI, WAV and MP3 open straight in Guitar Pro, MuseScore or your DAW.',
+    'pr.thai': 'Thai-friendly', 'pr.thaiP': 'Every tool has Thai screens or guidance; TabLens and Guitar Stem Studio switch between Thai and English.',
+    'pr.open': 'Free and open', 'pr.openP': 'All source code is on GitHub to run yourself or build on.',
+    'ft.by': 'by', 'ft.note': 'Tools written for my own guitar practice, shared for yours.'
+  };
+  const TH = {};
+  document.querySelectorAll('[data-i18n]').forEach(el => { TH[el.dataset.i18n] = el.textContent; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { TH[el.dataset.i18nHtml] = el.innerHTML; });
+
+  function setLang(lang) {
+    const d = lang === 'en' ? EN : TH;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => { const v = d[el.dataset.i18n]; if (v) el.textContent = v; });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => { const v = d[el.dataset.i18nHtml]; if (v) el.innerHTML = v; });
+    document.querySelectorAll('img[data-src-en]').forEach(img => { img.src = img.dataset['src' + (lang === 'en' ? 'En' : 'Th')]; });
+    document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    try { localStorage.setItem('ugt-lang', lang); } catch (e) {}
+  }
+  document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  let start = 'th';
+  try { start = localStorage.getItem('ugt-lang') || ((navigator.language || '').toLowerCase().startsWith('th') ? 'th' : 'en'); } catch (e) {}
+  if (start === 'en') setLang('en');
+
+  /* six strings, real gauges (high e on top), frets spaced like a neck, the tools placed as notes */
+  const neck = document.getElementById('neck');
+  const GAUGES = [1, 1.3, 1.7, 2.3, 3, 3.8], OPEN = [329.63, 246.94, 196, 146.83, 110, 82.41];
+  const strings = GAUGES.map((g, i) => {
+    const s = document.createElement('div'); s.className = 'string';
+    s.style.top = `calc(${(i + 0.5) / 6 * 100}% - ${g / 2}px)`; s.style.height = g + 'px';
+    neck.appendChild(s); return s;
+  });
+  let x = 0; for (let f = 1; f <= 12; f++) { x += (1 - x) * 0.105; const fr = document.createElement('div'); fr.className = 'fret'; fr.style.left = (x * 100) + '%'; neck.prepend(fr);
+    if ([3, 5, 7, 9].includes(f)) { const prev = 1 - (1 - x) / (1 - 0.105); const dot = document.createElement('div'); dot.className = 'inlay'; dot.style.left = ((prev + x) / 2 * 100) + '%'; neck.prepend(dot); } }
+  const TOOLS = [
+    { id: 'tablens', name: 'TabLens', short: 'Tab', s: 1, at: 14, fret: 2 },
+    { id: 'riff-forge', name: 'Riff Forge', short: 'Riff', s: 4, at: 38, fret: 5 },
+    { id: 'tempo-bench', name: 'Tempo Bench', short: 'Tempo', s: 2, at: 60, fret: 7 },
+    { id: 'guitar-stem-studio', name: 'Guitar Stem Studio', short: 'Stem', s: 3, at: 86, fret: 9 }
+  ];
+  const COLOR = { 'tablens': 'var(--tablens)', 'riff-forge': 'var(--riff)', 'tempo-bench': 'var(--tempo)', 'guitar-stem-studio': 'var(--gss)' };
+  let ac = null;
+  function pluck(freq) {
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)(); ac.resume();
+      // Karplus–Strong: a burst of noise through a short averaging delay line
+      const sr = ac.sampleRate, n = Math.round(sr / freq), len = Math.round(sr * 1.6), buf = ac.createBuffer(1, len, sr), d = buf.getChannelData(0), line = new Float32Array(n);
+      for (let i = 0; i < n; i++) line[i] = Math.random() * 2 - 1;
+      for (let i = 0, p = 0; i < len; i++) { const next = (p + 1) % n; d[i] = line[p]; line[p] = 0.4985 * (line[p] + line[next]); p = next; }
+      const src = ac.createBufferSource(), g = ac.createGain(); g.gain.value = 0.35; src.buffer = buf; src.connect(g); g.connect(ac.destination); src.start();
+    } catch (e) {}
+  }
+  TOOLS.forEach((t, i) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'note';
+    b.style.setProperty('--c', COLOR[t.id]); b.style.left = t.at + '%'; b.style.top = ((t.s + 0.5) / 6 * 100) + '%';
+    b.innerHTML = `<b>${t.fret}</b><span>${t.name}</span>`; b.dataset.short = t.short; b.setAttribute('aria-label', t.name);
+    b.addEventListener('mouseenter', () => { strings[t.s].classList.remove('ring'); void strings[t.s].offsetWidth; strings[t.s].classList.add('ring'); });
+    b.addEventListener('click', () => {
+      strings[t.s].classList.remove('ring'); void strings[t.s].offsetWidth; strings[t.s].classList.add('ring');
+      pluck(OPEN[t.s] * Math.pow(2, t.fret / 12));
+      setTimeout(() => document.getElementById(t.id).scrollIntoView({ block: 'start' }), 180);
+    });
+    neck.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>
