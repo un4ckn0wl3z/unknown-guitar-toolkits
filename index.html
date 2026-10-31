@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Unknown Guitar Toolkits</title>
-<meta name="description" content="ชุดเครื่องมือฝึกกีตาร์ 4 ตัว: TabLens, Riff Forge, Tempo Bench และ Guitar Stem Studio ฟรี โอเพนซอร์ส ทำงานบนเครื่องคุณ">
+<meta name="description" content="ชุดเครื่องมือฝึกกีตาร์ 5 ตัว: TabLens, Riff Forge, Tempo Bench, Solo Smith และ Guitar Stem Studio ฟรี โอเพนซอร์ส ทำงานบนเครื่องคุณ">
 <meta property="og:title" content="Unknown Guitar Toolkits">
-<meta property="og:description" content="From a tab in your hand to a band behind you. Four free, open-source tools for guitarists.">
+<meta property="og:description" content="From a tab in your hand to a band behind you. Five free, open-source tools for guitarists.">
 <meta property="og:image" content="assets/riff-forge.webp">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
 /* Layout: dark rosewood fretboard page; six strings run through the hero with each tool as a note; tools follow in workflow order */
 :root {
   --bg: #15110f; --bg-2: #1e1815; --bg-3: #271f1b; --ink: #f0e7db; --muted: #a8998a; --line: #3b302a; --string: #cdbca6; --fret: #5a4a40;
-  --tablens: #e0844a; --riff: #c6ea63; --tempo: #4fbcac; --gss: #f2ad37;
+  --tablens: #e0844a; --riff: #c6ea63; --tempo: #4fbcac; --solo: #c99af2; --gss: #f2ad37;
   --on-accent: #15110f;
   --font-display: "Chakra Petch", "IBM Plex Sans Thai", system-ui, sans-serif;
   --font-body: "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -26,12 +26,12 @@
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     --bg: #eeeae4; --bg-2: #f8f6f2; --bg-3: #e4ded5; --ink: #211a15; --muted: #6a5c51; --line: #d6ccc0; --string: #8a7663; --fret: #b9aa9a;
-    --tablens: #a4501a; --riff: #557311; --tempo: #1d6b62; --gss: #a96d0b; --on-accent: #ffffff; color-scheme: light;
+    --tablens: #a4501a; --riff: #557311; --tempo: #1d6b62; --solo: #7a3fb0; --gss: #a96d0b; --on-accent: #ffffff; color-scheme: light;
   }
 }
 :root[data-theme="light"] {
   --bg: #eeeae4; --bg-2: #f8f6f2; --bg-3: #e4ded5; --ink: #211a15; --muted: #6a5c51; --line: #d6ccc0; --string: #8a7663; --fret: #b9aa9a;
-  --tablens: #a4501a; --riff: #557311; --tempo: #1d6b62; --gss: #a96d0b; --on-accent: #ffffff; color-scheme: light;
+  --tablens: #a4501a; --riff: #557311; --tempo: #1d6b62; --solo: #7a3fb0; --gss: #a96d0b; --on-accent: #ffffff; color-scheme: light;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -150,14 +150,14 @@ footer a { color: var(--ink); }
 
 <main id="top">
   <div class="wrap hero">
-    <p class="eyebrow" data-i18n="hero.eyebrow">4 เครื่องมือสำหรับนักกีตาร์ · ฟรี · โอเพนซอร์ส</p>
+    <p class="eyebrow" data-i18n="hero.eyebrow">5 เครื่องมือสำหรับนักกีตาร์ · ฟรี · โอเพนซอร์ส</p>
     <h1 data-i18n-html="hero.title">จากแท็บในมือ<br><em>ถึงวงที่เล่นตามคุณ</em></h1>
-    <p class="lead" data-i18n="hero.lead">อ่านแท็บจากรูป สร้างกลองและเบสจากริฟฟ์ ซ้อมกับคลิกที่ตั้งได้ละเอียดทีละห้อง และแยกกีตาร์ออกจากเพลงจริง ทุกตัวทำงานบนเครื่องของคุณ ไม่ต้องอัปโหลดเพลงไปที่ไหน</p>
+    <p class="lead" data-i18n="hero.lead">อ่านแท็บจากรูป สร้างกลองและเบสจากริฟฟ์ ซ้อมกับคลิกที่ตั้งได้ละเอียดทีละห้อง สร้างโซโลตาม key ของเพลง และแยกกีตาร์ออกจากเพลงจริง ทุกตัวทำงานบนเครื่องของคุณ ไม่ต้องอัปโหลดเพลงไปที่ไหน</p>
     <div class="cta">
       <a class="btn solid" href="#tools" data-i18n="hero.cta">เลือกเครื่องมือ</a>
       <a class="btn" href="#connect" data-i18n="hero.cta2">ดูว่าใช้ร่วมกันยังไง</a>
     </div>
-    <div class="neck" id="neck" aria-label="Six guitar strings with the four tools placed on them"></div>
+    <div class="neck" id="neck" aria-label="Six guitar strings with the five tools placed on them"></div>
     <p class="neck-hint" data-i18n="hero.hint">แตะชื่อเครื่องมือบนสายเพื่อดีดสายแล้วข้ามไปดู</p>
   </div>
 
@@ -181,6 +181,16 @@ footer a { color: var(--ink); }
           </div>
         </div>
         <div class="lane">
+          <div class="lane-title" data-i18n="flow.laneC">เริ่มจาก backing track</div>
+          <div class="steps">
+            <span class="file" data-i18n="flow.key">key · สเกล · คอร์ด</span><span class="arrow" aria-hidden="true">→</span>
+            <a class="tool" href="#solo-smith" style="--c: var(--solo)">Solo Smith</a><span class="arrow" aria-hidden="true">→</span>
+            <span class="file" data-i18n="flow.solo">tab โซโล · .gp</span><span class="arrow" aria-hidden="true">→</span>
+            <a class="tool" href="#tempo-bench" style="--c: var(--tempo)">Tempo Bench</a><span class="arrow" aria-hidden="true">→</span>
+            <span class="file" data-i18n="flow.slow">ซ้อมโซโลช้าๆ ทีละห้อง</span>
+          </div>
+        </div>
+        <div class="lane">
           <div class="lane-title" data-i18n="flow.laneB">เริ่มจากเพลงจริง</div>
           <div class="steps">
             <span class="file">MP3 · YouTube</span><span class="arrow" aria-hidden="true">→</span>
@@ -197,7 +207,7 @@ footer a { color: var(--ink); }
   <section id="tools">
     <div class="wrap">
       <div class="sec-head">
-        <h2 data-i18n="tools.title">เครื่องมือทั้ง 4 ตัว</h2>
+        <h2 data-i18n="tools.title">เครื่องมือทั้ง 5 ตัว</h2>
         <p data-i18n="tools.lead">ใช้แยกกันก็ได้ ใช้ต่อกันก็ได้ ตัวที่รันในเบราว์เซอร์เปิดใช้ได้ทันทีโดยไม่ต้องติดตั้ง</p>
       </div>
       <div class="tools">
@@ -265,6 +275,27 @@ footer a { color: var(--ink); }
           </div>
         </article>
 
+        <article class="app" id="solo-smith" style="--c: var(--solo)">
+          <div class="shot"><div class="chrome"><i></i><i></i><i></i><span>un4ckn0wl3z.github.io/solo-smith</span></div><img src="assets/solo-smith.webp" width="1280" height="845" style="--ar: 1280 / 845" alt="Solo Smith with three takes of a blues solo in A minor pentatonic as tab" loading="lazy"></div>
+          <div class="info">
+            <div class="role" data-i18n="solo.role">สร้างโซโล</div>
+            <h3>Solo Smith</h3>
+            <p class="tagline" data-i18n="solo.tag">บอก key ของ backing track แล้วได้โซโลที่เล่นได้จริงหลายเวอร์ชัน</p>
+            <div class="io" data-i18n="solo.io">key · สเกล · คอร์ด → tab · Guitar Pro · MIDI · WAV</div>
+            <ul class="feats">
+              <li data-i18n="solo.f1">13 สเกล: pentatonic, blues, ทุก mode, harmonic minor และ phrygian dominant · 4 สไตล์: blues, rock, metal shred, melodic</li>
+              <li data-i18n="solo.f2">สร้างทีละวลีแบบถาม-ตอบ ลงโน้ตในคอร์ดบนจังหวะหนัก มี bend, hammer-on, slide และ vibrato</li>
+              <li data-i18n="solo.f3">อยู่ในตำแหน่งนิ้วที่เล่นได้จริง (box หรือ 3 โน้ตต่อสาย) รองรับกีตาร์ 6 และ 7 สาย สร้างใหม่ทีละวลีได้</li>
+              <li data-i18n="solo.f4">ฟังพร้อมกลอง เบส และคีย์บอร์ด ส่งออก Guitar Pro, MIDI, WAV หรือเฉพาะวงไว้ซ้อมด้นสด</li>
+            </ul>
+            <div class="meta-row">
+              <a class="btn solid" href="https://un4ckn0wl3z.github.io/solo-smith/" target="_blank" rel="noopener" data-i18n="btn.open">เปิดแอป</a>
+              <a class="btn" href="https://github.com/un4ckn0wl3z/solo-smith" target="_blank" rel="noopener">GitHub</a>
+              <span class="platform" data-i18n="platform.browser">เบราว์เซอร์</span>
+            </div>
+          </div>
+        </article>
+
         <article class="app" id="guitar-stem-studio" style="--c: var(--gss)">
           <div class="shot"><div class="chrome"><i></i><i></i><i></i><span>localhost:8000</span></div><img data-src-th="assets/gss-th.webp" data-src-en="assets/gss-en.webp" src="assets/gss-th.webp" width="1400" height="766" style="--ar: 1400 / 766" alt="Guitar Stem Studio mixer with six stems" loading="lazy"></div>
           <div class="info">
@@ -314,16 +345,17 @@ footer a { color: var(--ink); }
 (() => {
   const EN = {
     'nav.tools': 'Tools', 'nav.connect': 'How they connect',
-    'hero.eyebrow': '4 tools for guitarists · free · open source',
+    'hero.eyebrow': '5 tools for guitarists · free · open source',
     'hero.title': 'From a tab in your hand<br><em>to a band behind you</em>',
-    'hero.lead': 'Read tab from a picture, build drums and bass from your riff, practise to a click you can shape bar by bar, and pull the guitar out of a real recording. Everything runs on your own machine, so your songs never leave it.',
+    'hero.lead': 'Read tab from a picture, build drums and bass from your riff, practise to a click you can shape bar by bar, generate solos in your song’s key, and pull the guitar out of a real recording. Everything runs on your own machine, so your songs never leave it.',
     'hero.cta': 'Pick a tool', 'hero.cta2': 'See how they connect',
     'hero.hint': 'Tap a tool on the strings to pluck it and jump there',
     'flow.title': 'How they fit together',
     'flow.lead': 'What one tool exports, the next one opens. Every tool uses standard files, so they also slot into your DAW or tab editor.',
     'flow.laneA': 'Start from a tab', 'flow.tabImage': 'tab image · text tab', 'flow.band': 'drums + bass · MIDI / WAV', 'flow.click': 'practise to a click · click track',
+    'flow.laneC': 'Start from a backing track', 'flow.key': 'key · scale · chords', 'flow.solo': 'solo tab · .gp', 'flow.slow': 'practise the solo slowly, bar by bar',
     'flow.laneB': 'Start from a recording', 'flow.stems': '6 stems · backing track', 'flow.align': 'line the click up · export it',
-    'tools.title': 'The four tools', 'tools.lead': 'Use any one on its own or chain them. The browser tools open instantly, with nothing to install.',
+    'tools.title': 'The five tools', 'tools.lead': 'Use any one on its own or chain them. The browser tools open instantly, with nothing to install.',
     'tablens.role': 'Read tab', 'tablens.tag': 'Turn guitar tab images into Guitar Pro 5 files', 'tablens.io': 'scans · screenshots · text tab → .gp5',
     'tablens.f1': 'Reads fret numbers and barlines from images, straightens tilted scans, and highlights numbers worth checking',
     'tablens.f2': 'Set the rhythm and add bends, slides, hammer-ons, palm mutes and harmonics',
@@ -339,13 +371,18 @@ footer a { color: var(--ink); }
     'tempo.f2': 'Speed trainer, gap click, song structures and practice stats',
     'tempo.f3': 'Song practice: set the click bar by bar, hear the notes from the file, and mute the part you play',
     'tempo.f4': 'Same drum and bass samples as Riff Forge; export a click track for just the bars you pick',
+    'solo.role': 'Write the solo', 'solo.tag': 'Tell it your backing track’s key and get several solos you can actually play', 'solo.io': 'key · scale · chords → tab · Guitar Pro · MIDI · WAV',
+    'solo.f1': '13 scales: pentatonic, blues, every mode, harmonic minor and phrygian dominant · 4 styles: blues, rock, metal shred, melodic',
+    'solo.f2': 'Built phrase by phrase as call and response, chord tones on strong beats, with bends, hammer-ons, slides and vibrato',
+    'solo.f3': 'Stays in a playable position (box or three notes per string), 6- and 7-string tunings, rebuild any single phrase',
+    'solo.f4': 'Hear it with drums, bass and keys; export Guitar Pro, MIDI, WAV, or the band alone to improvise over',
     'gss.role': 'Play along with the record', 'gss.tag': 'Split a real song into 6 stems and play the guitar part yourself', 'gss.io': 'MP3 · YouTube link → 6 stems · backing track',
     'gss.f1': 'AI separation (Demucs) into guitar, vocals, drums, bass, piano and other; download any stem',
     'gss.f2': 'Slow down to 25–150% with pitch kept, and loop any A–B section',
     'gss.f3': 'A metronome that follows the song’s real beats, with count-in',
     'gss.f4': 'Export a backing track as MP3 or WAV with your choice of stems, range and speed',
     'btn.open': 'Open app', 'btn.download': 'Download', 'platform.browser': 'Browser', 'platform.desktop': 'Windows · macOS',
-    'pr.title': 'Built the same way, all four', 'pr.local': 'Runs on your machine', 'pr.localP': 'Your songs and tabs stay with you. No account, no API key.',
+    'pr.title': 'Built the same way, all five', 'pr.local': 'Runs on your machine', 'pr.localP': 'Your songs and tabs stay with you. No account, no API key.',
     'pr.files': 'Standard files', 'pr.filesP': 'GP5, MIDI, WAV and MP3 open straight in Guitar Pro, MuseScore or your DAW.',
     'pr.thai': 'Thai-friendly', 'pr.thaiP': 'Every tool has Thai screens and switches between Thai and English.',
     'pr.open': 'Free and open', 'pr.openP': 'All source code is on GitHub to run yourself or build on.',
@@ -383,9 +420,10 @@ footer a { color: var(--ink); }
     { id: 'tablens', name: 'TabLens', short: 'Tab', s: 1, at: 14, fret: 2 },
     { id: 'riff-forge', name: 'Riff Forge', short: 'Riff', s: 4, at: 38, fret: 5 },
     { id: 'tempo-bench', name: 'Tempo Bench', short: 'Tempo', s: 2, at: 60, fret: 7 },
+    { id: 'solo-smith', name: 'Solo Smith', short: 'Solo', s: 0, at: 76, fret: 12 },
     { id: 'guitar-stem-studio', name: 'Guitar Stem Studio', short: 'Stem', s: 3, at: 86, fret: 9 }
   ];
-  const COLOR = { 'tablens': 'var(--tablens)', 'riff-forge': 'var(--riff)', 'tempo-bench': 'var(--tempo)', 'guitar-stem-studio': 'var(--gss)' };
+  const COLOR = { 'tablens': 'var(--tablens)', 'riff-forge': 'var(--riff)', 'tempo-bench': 'var(--tempo)', 'solo-smith': 'var(--solo)', 'guitar-stem-studio': 'var(--gss)' };
   let ac = null;
   function pluck(freq) {
     try {
